@@ -163,33 +163,35 @@ marp-slides/
 
 ### Problem Discovered
 
-When exporting to PDF, inline `style=` attributes in HTML elements are rendered as raw text instead of being applied as styles:
-
-```html
-<!-- BROKEN in PDF: Shows raw style text -->
-<div style="display: flex; gap: 14px;">
-  <div style="flex: 1; background: #111; ...">Content</div>
-</div>
-```
+When exporting to PDF, HTML elements may not render correctly. The issue is that the `--html` CLI flag must be passed to enable HTML tag support during PDF conversion.
 
 ### Solution
 
-Use CSS classes defined in the slide's frontmatter `style:` block:
+**Use the `--html` flag when exporting to PDF:**
+
+```bash
+# Correct command for PDF export
+npx @marp-team/marp-cli slides.md --pdf --html --allow-local-files
+```
+
+**Also use CSS classes in frontmatter for consistent styling:**
 
 ```markdown
 ---
 marp: true
 theme: default
-html: true
 style: |
   .flex-row { display: flex; gap: 14px; }
-  .card { background: var(--s); border: 1px solid var(--b); ... }
-  .metric-label { font-size: 0.6em; color: var(--m); ... }
+  .card { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 18px; }
+  .metric-label { font-size: 0.6em; color: var(--m); text-transform: uppercase; }
+  .metric-value { font-size: 2em; font-weight: 800; color: var(--t); }
 ---
 
-<!-- WORKS in PDF: Uses CSS classes -->
 <div class="flex-row">
-  <div class="card">Content</div>
+  <div class="card">
+    <div class="metric-label">Revenue</div>
+    <div class="metric-value">$45,000</div>
+  </div>
 </div>
 ```
 
@@ -212,22 +214,46 @@ Add these to your frontmatter for metric cards:
 
 | File | Change |
 |------|--------|
-| `components/metrics.md` | Now documents CSS classes instead of inline styles |
+| `components/metrics.md` | Documents CSS classes instead of inline styles |
 | `slides.md` (test) | Updated to use CSS classes, exports correctly to PDF |
 | `HOW-TOs.md` | Added OpenClaw export workflow |
 | `skill.yaml` | Added `openclaw_integration` section |
+| `test-pdf.sh` | Unit test script for PDF export validation |
 
 ### OpenClaw Export Workflow
 
 After generating slides content, users can say:
-- "Export to PDF" → runs `npx @marp-team/marp-cli slides.md --pdf --allow-local-files`
+- "Export to PDF" → runs `npx @marp-team/marp-cli slides.md --pdf --html --allow-local-files`
 - "Export to HTML" → runs `npx @marp-team/marp-cli slides.md --html --allow-local-files`
 - "Export to PowerPoint" → runs `npx @marp-team/marp-cli slides.md --pptx --allow-local-files`
+
+**Note:** The `--html` flag is required for PDF export to enable HTML tag rendering.
 
 ### Test Results
 
 | Export | Result | Size |
 |--------|--------|------|
-| PDF | ✅ Works with CSS classes | 69KB (test), 2.7MB (example) |
+| PDF (with --html) | ✅ Works correctly | 35KB (test), 2.7MB (example) |
 | HTML | ✅ Works | 98KB |
 | Example deck | ✅ marp_sample.pdf exports correctly | 2.7MB |
+
+### Unit Test
+
+Run `./test-pdf.sh` to validate PDF export:
+
+```
+=== MARP Slides PDF Unit Test ===
+Test 1: Checking marp-cli installation...
+  ✓ @marp-team/marp-cli v3.4.0 (w/ @marp-team/marp-core v3.9.1)
+Test 2: Creating test slide with CSS classes...
+  ✓ Test file created
+Test 3: Exporting to PDF with --html flag...
+  ✓ PDF generated
+Test 4: Verifying PDF content...
+  ✓ 'Revenue' text found
+  ✓ '45,000' text found
+  ✓ No raw HTML tags in PDF
+Test 5: Checking PDF file size...
+  ✓ PDF size: 35013 bytes (valid)
+=== All Tests Passed ===
+```

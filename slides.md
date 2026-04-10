@@ -3,7 +3,6 @@ marp: true
 theme: default
 paginate: true
 title: Test Presentation
-html: true
 style: |
   @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Raleway:wght@100;200;300&display=swap');
 
@@ -52,6 +51,7 @@ style: |
   .metric-trend { font-size: 0.75em; color: var(--g); margin-top: 6px; display: flex; align-items: center; gap: 4px; }
   .flex-row { display: flex; gap: 14px; margin-top: 16px; }
   .flex-1 { flex: 1; }
+---
 
 # Test MARP Slides
 
