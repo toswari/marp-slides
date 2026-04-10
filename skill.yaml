@@ -35,6 +35,23 @@ export_commands:
   pptx: "npx @marp-team/marp-cli slides.md --pptx --allow-local-files"
   html: "npx @marp-team/marp-cli slides.md --html --allow-local-files"
 
+openclaw_integration:
+  description: |
+    After generating slides.md content, OpenClaw can automatically export to PDF/HTML
+  workflow:
+    - step: 1
+      action: generate
+      description: "OpenClaw generates slides.md content based on user prompt"
+    - step: 2
+      action: save
+      description: "Content saved to slides.md in workspace root"
+    - step: 3
+      action: export
+      description: "Run export command to generate PDF/HTML/PPTX"
+  auto_export_prompt: |
+    After generating slides content, I can run the export command for you.
+    Say "export to PDF" or "build HTML" and I'll run the marp-cli command.
+
 structure:
   instructions: instructions.md
   templates: templates/

@@ -125,6 +125,27 @@ Use full-bleed photography style.
 
 ## Generating and Viewing Output
 
+### Option 0: Ask OpenClaw to Export (Easiest!)
+
+After OpenClaw generates your slides content, simply say:
+
+```
+Export to PDF
+```
+or
+```
+Build HTML version
+```
+
+OpenClaw will run the marp-cli command automatically and generate the output file.
+
+**Available export commands:**
+- "Export to PDF" → creates `slides.pdf`
+- "Export to PowerPoint" → creates `slides.pptx`
+- "Export to HTML" → creates `slides.html`
+
+---
+
 ### Option 1: VS Code Preview (Recommended)
 
 1. Create a new file: `slides.md`
@@ -164,7 +185,9 @@ npx @marp-team/marp-cli slides.md --html --allow-local-files -o output.html
 
 ## Complete Workflow Example
 
-### 1. Request Content from OpenClaw
+### Workflow A: With OpenClaw Export
+
+#### 1. Request Content from OpenClaw
 
 **Prompt:**
 ```
@@ -178,15 +201,33 @@ Include:
 - Recommendations for April
 ```
 
-### 2. Save the Generated Content
+#### 2. Ask OpenClaw to Export
+
+Simply say: **"Export this to PDF"**
+
+OpenClaw runs:
+```bash
+npx @marp-team/marp-cli slides.md --pdf --allow-local-files
+```
+
+#### 3. View Output
+
+- PDF: Open `slides.pdf` in your PDF viewer
+- Or say "Export to HTML" for an interactive web version
+
+---
+
+### Workflow B: Manual Export
+
+#### 1. Save the Generated Content
 
 Save the output as `slides.md` in the project root.
 
-### 3. Preview in VS Code
+#### 2. Preview in VS Code
 
 Open the Marp preview to see the rendered slides.
 
-### 4. Export to Your Format
+#### 3. Export to Your Format
 
 ```bash
 # For sharing via email
@@ -199,7 +240,7 @@ npm run build:pptx
 npm run build:html
 ```
 
-### 5. View Output
+#### 4. View Output
 
 - PDF: Open `output.pdf` in any PDF reader
 - PPTX: Open `output.pptx` in PowerPoint
