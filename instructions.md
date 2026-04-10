@@ -63,14 +63,80 @@ Before generating any deck, read 2-3 examples that match the requested style. Th
 ## Export Commands
 
 ```bash
-# PDF
+# PDF (Recommended - best fidelity)
 npx @marp-team/marp-cli slides.md --pdf --allow-local-files
 
-# PowerPoint
-npx @marp-team/marp-cli slides.md --pptx --allow-local-files
+# PowerPoint (PPTX) - See PPTX Guidelines below
+npx @marp-team/marp-cli slides.md --pptx --allow-local-files -o output.pptx
 
 # HTML (keeps animations and interactive elements)
 npx @marp-team/marp-cli slides.md --html --allow-local-files
 ```
 
 Note: `--pptx-editable` needs LibreOffice. Animations + details only work in HTML export.
+
+## PPTX Guidelines ⚠️ CRITICAL
+
+**Important**: Marp exports PPTX by rendering slides as PNG images set as slide **backgrounds**. This means:
+
+### What Works in PPTX ✅
+- Pure markdown (headers, lists, blockquotes)
+- Emoji characters (📊 💰 📈 ✅ 🎯)
+- Simple tables
+- Background images via `![bg](url)`
+- CSS colors, fonts, gradients (rendered into PNG)
+- Marp directives (`<!-- _class: lead -->`)
+
+### What Does NOT Work in PPTX ❌
+- **SVG elements** - Will show as raw XML text
+- **Complex inline HTML** - May show as escaped text
+- **CSS variables in inline styles** - `var(--color)` may not resolve
+- **Deep nested `<div>` structures** - Triggers HTML escaping
+- **`<span>` with classes in tables** - May not render
+- **`<details>`/`<summary>`** - Not supported
+- **Animations** - Only work in HTML export
+- **Interactive elements** - Only work in HTML export
+
+### PPTX Best Practices
+
+1. **Use emoji instead of SVG icons**
+   - ❌ `<svg>...</svg>` → ✅ 📊 💰 📈 ✅ 🎯 ☕ 
+
+2. **Use markdown tables instead of styled divs**
+   - ❌ `<div class="metric">...</div>` → ✅ `| Metric | Value |`
+
+3. **Use hardcoded colors in inline styles (not CSS variables)**
+   - ❌ `style="color: var(--a)"` → ✅ `style="color: #ff6b1a"`
+
+4. **Keep HTML simple - avoid deep nesting**
+   - ❌ `<div><div><span>...</span></div></div>` → ✅ Pure markdown
+
+5. **For complex visualizations, use HTML export instead**
+   - Charts, diagrams, interactive elements → Use `--html`
+
+### When to Use Each Format
+
+| Format | Best For | Limitations |
+|--------|----------|-------------|
+| **PDF** | Sharing, printing, presentations | Not editable |
+| **PPTX** | Client delivery, corporate environments | Text not editable, no animations |
+| **HTML** | Interactive demos, animations, web | Requires browser |
+
+### PPTX Verification
+
+After generating PPTX, verify content rendered correctly:
+
+```bash
+# Check PNG images are embedded
+unzip -l file.pptx | grep "ppt/media"
+# Should show: Slide-1-image-1.png, Slide-2-image-1.png, etc.
+
+# Check PNG is valid (should start with 89504e47)
+unzip -p file.pptx ppt/media/Slide-1-image-1.png | xxd | head -1
+```
+
+If slides show raw HTML text instead of rendered content:
+1. Simplify the markdown source (remove SVG, complex HTML)
+2. Use emoji instead of SVG icons
+3. Use markdown tables instead of styled divs
+4. Consider PDF or HTML export instead

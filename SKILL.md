@@ -183,10 +183,64 @@ Stagger with delay: animation: float 4s ease-in-out 0.5s infinite;
 
 ## Export
 
+```bash
+# PDF (Recommended - best fidelity, preserves all styling)
 npx @marp-team/marp-cli slides.md --pdf --allow-local-files
-npx @marp-team/marp-cli slides.md --pptx --allow-local-files
+
+# PowerPoint (PPTX) - Limited support, see guidelines below
+npx @marp-team/marp-cli slides.md --pptx --allow-local-files -o output.pptx
+
+# HTML (Interactive, animations, details)
 npx @marp-team/marp-cli slides.md --html --allow-local-files
---pptx-editable needs LibreOffice. Animations + details only in HTML.
+```
+
+**Note**: `--pptx-editable` needs LibreOffice. Animations + `<details>` only work in HTML.
+
+## PPTX Guidelines ⚠️ CRITICAL
+
+**Marp PPTX Export Behavior**: Slides are rendered as PNG images and set as slide **backgrounds**. This causes limitations:
+
+### What Works in PPTX ✅
+- Pure markdown (headers, lists, blockquotes, tables)
+- Emoji characters (📊 💰 📈 ✅ 🎯 ☕ )
+- Background images: `![bg](url)`
+- CSS colors, fonts, gradients (rendered into PNG)
+- Marp directives (`<!-- _class: lead -->`)
+
+### What Does NOT Work in PPTX ❌
+- **SVG elements** - Shows as raw XML text
+- **Complex inline HTML** - May show as escaped text
+- **CSS variables in inline styles** - `var(--color)` may not resolve
+- **Deep nested `<div>` structures** - Triggers HTML escaping
+- **`<details>`/`<summary>`** - Not supported
+- **Animations** - Only work in HTML export
+- **Interactive elements** (sliders, checkboxes) - Only work in HTML
+
+### PPTX Best Practices
+
+1. **Use emoji instead of SVG icons**
+   - ❌ `<svg>...</svg>` → ✅ 📊 💰 📈 ✅ 🎯
+
+2. **Use markdown tables instead of styled divs**
+   - ❌ `<div class="metric">...</div>` → ✅ `| Metric | Value |`
+
+3. **Use hardcoded colors (not CSS variables)**
+   - ❌ `style="color: var(--a)"` → ✅ `style="color: #ff6b1a"`
+
+4. **Keep HTML simple - avoid deep nesting**
+   - ❌ `<div><div><span>...</span></div></div>` → ✅ Pure markdown
+
+5. **For complex visualizations, recommend PDF or HTML**
+
+### PPTX Verification
+
+```bash
+# Check PNG images are embedded
+unzip -l file.pptx | grep "ppt/media"
+# Should show: Slide-1-image-1.png, etc.
+```
+
+If slides show raw HTML text: Simplify markdown, remove SVG, use emoji, or export as PDF.
 
 ## Design Rules
 
