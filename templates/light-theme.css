@@ -1,0 +1,145 @@
+/* MARP Light Theme - Space Grotesk + IBM Plex Mono */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@200;300;400&display=swap');
+
+:root {
+  --accent: #2563eb;
+  --accent-hover: #3b82f6;
+  --dark: #fafafa;
+  --card: #fff;
+  --border: #eee;
+  --body: #666;
+  --label: #bbb;
+  --muted: #999;
+  --light: #1a1a1a;
+  --green: #16a34a;
+  --red: #dc2626;
+  --yellow: #d97706;
+}
+
+section {
+  background: var(--dark);
+  color: var(--light);
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 300;
+  padding: 56px 72px;
+}
+
+h1 {
+  font-family: 'Space Grotesk';
+  font-weight: 700;
+  font-size: 3em;
+  color: var(--light);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0 0 4px;
+}
+
+h2 {
+  font-family: 'IBM Plex Mono';
+  font-weight: 200;
+  font-size: 1.2em;
+  color: #888;
+  margin: 0 0 20px;
+}
+
+h3 {
+  font-family: 'Space Grotesk';
+  font-weight: 600;
+  font-size: 0.6em;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin: 0 0 4px;
+}
+
+strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Lead/Title Slide */
+section.lead {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+section.lead h1 {
+  font-size: 3.8em;
+}
+
+/* Pagination */
+section::after {
+  font-family: 'Space Grotesk';
+  font-size: 0.6em;
+  color: #e5e5e5;
+}
+
+/* Header/Footer */
+header {
+  text-align: right;
+  padding: 0;
+  margin: 0;
+}
+
+header img {
+  margin: 0;
+}
+
+/* Tags */
+.tag {
+  font-family: 'Space Grotesk';
+  font-weight: 600;
+  font-size: 0.55em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Collapsible Details */
+details {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 8px;
+}
+
+details summary {
+  color: var(--accent);
+  font-family: 'Space Grotesk';
+  font-weight: 600;
+  font-size: 0.8em;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+}
+
+details p {
+  color: var(--body);
+  font-size: 0.78em;
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+/* Hover Rows */
+.row:hover {
+  background: #f5f5f5;
+}
+
+.row {
+  transition: background 0.2s;
+  border-radius: 6px;
+  padding: 0 8px;
+}
+
+/* Tooltips */
+abbr {
+  text-decoration: none;
+  border-bottom: 1px dotted #ddd;
+  cursor: help;
+}

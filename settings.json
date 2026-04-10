@@ -1,0 +1,6 @@
+{
+  "markdown.marp.enableHtml": true,
+  "markdown.marp.allowLocalFiles": true,
+  "markdown.marp.themesPath": "./templates",
+  "markdown.preview.openMarkdownLinks": "inPreview"
+}

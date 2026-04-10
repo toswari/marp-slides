@@ -1,0 +1,28 @@
+{
+  "name": "marp-slides",
+  "version": "2.0.0",
+  "description": "Create beautiful MARP presentation decks with SVG charts, interactive elements, dashboard components, animations, dark/light themes",
+  "author": "robonuggets",
+  "license": "MIT",
+  "keywords": [
+    "marp",
+    "presentation",
+    "slides",
+    "deck",
+    "dashboard",
+    "charts"
+  ],
+  "scripts": {
+    "build:pdf": "npx @marp-team/marp-cli slides.md --pdf --allow-local-files",
+    "build:pptx": "npx @marp-team/marp-cli slides.md --pptx --allow-local-files",
+    "build:html": "npx @marp-team/marp-cli slides.md --html --allow-local-files",
+    "build:all": "npx @marp-team/marp-cli slides.md --pdf --pptx --html --allow-local-files"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "^3.0.0"
+  },
+  "marp": {
+    "enableHtml": true,
+    "allowLocalFiles": true
+  }
+}

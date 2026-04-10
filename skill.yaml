@@ -1,0 +1,59 @@
+name: marp-slides
+version: 2.0.0
+updated: 2026-04-08
+author: robonuggets
+license: MIT
+category: presentation
+
+description: |
+  Create beautiful MARP presentation decks with SVG charts, interactive elements, 
+  dashboard components, animations, dark/light themes.
+
+triggers:
+  - marp
+  - slides
+  - presentation
+  - deck
+  - dashboard
+  - charts
+
+prerequisites:
+  - name: Marp for VS Code
+    type: extension
+    url: https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode
+  - name: marp-cli
+    type: npm
+    package: "@marp-team/marp-cli"
+    install: "npx @marp-team/marp-cli --version"
+
+settings:
+  markdown.marp.enableHtml: true
+  markdown.marp.allowLocalFiles: true
+
+export_commands:
+  pdf: "npx @marp-team/marp-cli slides.md --pdf --allow-local-files"
+  pptx: "npx @marp-team/marp-cli slides.md --pptx --allow-local-files"
+  html: "npx @marp-team/marp-cli slides.md --html --allow-local-files"
+
+structure:
+  instructions: instructions.md
+  templates: templates/
+  components: components/
+  examples: examples/
+
+examples_count: 22
+example_categories:
+  - name: Data / Dashboard
+    examples: [marp_facebook-ads.md, marp_fitness.md, marp_comparison.md]
+  - name: Lifestyle / Editorial
+    examples: [marp_coffee.md, marp_wine-tasting.md, marp_cocktail.md]
+  - name: Guide / How-To
+    examples: [marp_garden.md, marp_houseplant.md, marp_home-gym.md]
+  - name: Fun / Creative
+    examples: [marp_kids-party.md, marp_board-game.md, marp_film-director.md]
+  - name: Travel / Location
+    examples: [marp_travel.md, marp_walking-tour.md, marp_road-trip.md]
+  - name: Showcase / Hero
+    examples: [marp_hero.md, marp_apartment.md, marp_wardrobe.md]
+  - name: Reference / Sampler
+    examples: [marp_sample.md]

@@ -1,34 +1,18 @@
 # MARP Slides
 
-A Claude Code skill for creating beautiful presentations using [MARP](https://marp.app) — SVG charts, dashboard components, dark/light themes, and 22 curated example decks to learn from.
+A skill for creating beautiful MARP presentation decks — SVG charts, dashboard components, dark/light themes, and 22 curated example decks.
 
-## What it does
+## Quick Start
 
-Give Claude Code a topic and it builds a polished MARP deck. The skill teaches it how to compose slides using SVG charts, metric cards, gauges, sparklines, progress bars, expandable sections, and more — all in raw HTML inside Markdown.
-
-The 22 example decks are the secret sauce. Instead of just knowing the building blocks, Claude reads real decks that look good and matches that quality bar.
-
-## Quick start
-
-### 1. Install the skill
+### 1. Install Dependencies
 
 ```bash
-git clone https://github.com/robonuggets/marp-slides
+npm install
 ```
 
-### 2. Add it to Claude Code
+### 2. Configure VS Code
 
-Point Claude Code at the skill folder:
-
-```bash
-claude --add-dir ./marp-slides
-```
-
-Or add it manually to your project's `.claude/skills/` directory.
-
-### 3. Install the VS Code extension
-
-Install **Marp for VS Code** and enable these settings:
+Copy settings to your VS Code user settings:
 
 ```json
 {
@@ -37,7 +21,50 @@ Install **Marp for VS Code** and enable these settings:
 }
 ```
 
-### 4. Ask for a presentation
+Or use the provided `settings.json` as reference.
+
+### 3. Create Your Deck
+
+```bash
+npx @marp-team/marp-cli slides.md --pdf --allow-local-files
+```
+
+## Project Structure
+
+```
+marp-slides/
+├── skill.yaml              # Skill definition (name, triggers, metadata)
+├── instructions.md         # Core rules and guidelines
+├── README.md               # This file
+├── package.json            # Dependencies and build scripts
+├── settings.json           # VS Code settings reference
+│
+├── templates/
+│   ├── dark-theme.css      # Dark theme (Outfit + Raleway)
+│   └── light-theme.css     # Light theme (Space Grotesk + IBM Plex Mono)
+│
+├── components/
+│   ├── metrics.md          # Metric cards, status dots, verdict tags
+│   ├── charts.md           # SVG charts (line, donut, gauge, bar)
+│   ├── interactive.md      # details, tooltips, sliders, progress
+│   ├── layouts.md          # splits, mockups, timelines, cards
+│   └── icons.md            # SVG icon library (20+ icons)
+│
+├── examples/
+│   ├── README.md           # Category index with usage guide
+│   ├── examples.yaml       # Machine-readable manifest
+│   └── *.md                # 22 curated example decks
+│
+└── exports/                # Generated output (PDF, PPTX, HTML)
+```
+
+## Usage
+
+### Trigger Keywords
+
+This skill activates on: `marp`, `slides`, `presentation`, `deck`, `dashboard`, `charts`
+
+### Example Prompts
 
 ```
 Create a MARP presentation reviewing my Q1 sales data. Dark theme, include stat cards and a bar chart.
@@ -51,57 +78,47 @@ Make me a deck about my favorite coffee brewing methods. Editorial style, warm t
 Build a fitness dashboard presentation from this CSV data.
 ```
 
-## What's included
+### Build Commands
 
+```bash
+# PDF export
+npm run build:pdf
+
+# PowerPoint export
+npm run build:pptx
+
+# HTML export (keeps animations and interactive elements)
+npm run build:html
+
+# All formats
+npm run build:all
 ```
-marp-slides/
-├── SKILL.md              # The skill — rules, components, design system
-└── examples/             # 22 curated reference decks
-    ├── marp_facebook-ads.md    # Data dashboard with SVG charts
-    ├── marp_coffee.md          # Editorial lifestyle deck
-    ├── marp_fitness.md         # Health tracking dashboard
-    ├── marp_wine-tasting.md    # Tasting notes with ratings
-    ├── marp_travel.md          # Travel guide with maps
-    ├── marp_kids-party.md      # Fun creative deck
-    └── ... 16 more examples
-```
-
-## Example categories
-
-| Category | Examples | Style |
-|---|---|---|
-| Data / dashboard | facebook-ads, fitness, comparison | SVG charts, stat cards, gauges |
-| Lifestyle / editorial | coffee, wine-tasting, cocktail | Warm tones, photography, ratings |
-| Guide / how-to | garden, houseplant, home-gym | Step-by-step, tips, checklists |
-| Fun / creative | kids-party, board-game, film-director | Playful, colorful, interactive |
-| Travel / location | travel, walking-tour, road-trip | Maps, itineraries, photo backgrounds |
-| Showcase | hero, apartment, wardrobe | Visual-first, minimal text |
 
 ## Features
 
-- **Dark and light themes** with tested font pairings (Outfit + Raleway, DM Serif + DM Sans, Space Grotesk + IBM Plex Mono, and more)
-- **SVG charts** — line/area, donut/pie, gauges, sparklines, bar charts, radar
-- **Dashboard components** — metric cards with gradient borders, status dots, verdict tags, hover rows
-- **Interactive elements** — collapsible `<details>` sections, tooltips, progress bars
-- **Layout components** — before/after splits, terminal mockups, chat bubbles, timelines, flowcharts
-- **SVG icon library** — 16+ inline icons (dollar, heartbeat, check, arrow, lightning, etc.)
+- **Dark and Light Themes** — Tested font pairings (Outfit + Raleway, Space Grotesk + IBM Plex Mono)
+- **SVG Charts** — Line/area, donut/pie, gauges, sparklines, bar charts, radar
+- **Dashboard Components** — Metric cards, status dots, verdict tags, hover rows
+- **Interactive Elements** — Collapsible sections, tooltips, progress bars (HTML only)
+- **Layout Components** — Before/after splits, terminal mockups, chat bubbles, timelines
+- **Icon Library** — 20+ inline SVG icons for finance, status, actions, and more
 
-## Export
+## Example Categories
 
-```bash
-# PDF
-npx @marp-team/marp-cli slides.md --pdf --allow-local-files
+| Category | Examples | Style |
+|----------|----------|-------|
+| Data / Dashboard | facebook-ads, fitness, comparison | SVG charts, stat cards, gauges |
+| Lifestyle / Editorial | coffee, wine-tasting, cocktail | Warm tones, photography, ratings |
+| Guide / How-To | garden, houseplant, home-gym | Step-by-step, tips, checklists |
+| Fun / Creative | kids-party, board-game, film-director | Playful, colorful, interactive |
+| Travel / Location | travel, walking-tour, road-trip | Maps, itineraries, photo backgrounds |
+| Showcase | hero, apartment, wardrobe | Visual-first, minimal text |
 
-# PowerPoint
-npx @marp-team/marp-cli slides.md --pptx --allow-local-files
+## Learning from Examples
 
-# HTML (keeps animations and interactive elements)
-npx @marp-team/marp-cli slides.md --html --allow-local-files
-```
+The `examples/` folder contains 22 curated reference decks. **Before generating any deck, read 2-3 examples that match the requested style.** These teach composition — how to combine components into slides that look good.
 
-## How the examples help
-
-The skill file (SKILL.md) teaches the building blocks — CSS variables, chart math, icon paths. But the examples teach **composition** — how to combine those blocks into slides that actually look good. When Claude reads the examples before generating, it matches the spacing, density, and visual rhythm of a real polished deck instead of just stacking components.
+See [examples/README.md](examples/README.md) for the full category index and selection guide.
 
 ## License
 

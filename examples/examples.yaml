@@ -1,0 +1,142 @@
+# MARP Slides Examples Manifest
+
+# Data / Dashboard
+- id: facebook-ads
+  file: marp_facebook-ads.md
+  category: data-dashboard
+  features: [charts, metrics, gauges, funnel, donut, sparklines]
+  complexity: advanced
+  slides: 18
+  description: Monthly Facebook Ads performance report with ROAS tracking, funnel visualization, and budget allocation
+
+- id: fitness
+  file: marp_fitness.md
+  category: data-dashboard
+  features: [metrics, progress-tracker, habit-tracker]
+  complexity: intermediate
+  description: Health and fitness tracking dashboard with workout logs and progress metrics
+
+- id: comparison
+  file: marp_comparison.md
+  category: data-dashboard
+  features: [comparison-table, verdict-tags, before-after]
+  complexity: intermediate
+  description: Product or service comparison with verdict recommendations
+
+# Lifestyle / Editorial
+- id: coffee
+  file: marp_coffee.md
+  category: lifestyle-editorial
+  features: [photography, ratings, warm-tones]
+  complexity: intermediate
+  description: Coffee brewing methods guide with editorial-style photography
+
+- id: wine-tasting
+  file: marp_wine-tasting.md
+  category: lifestyle-editorial
+  features: [ratings, tasting-notes, photography]
+  complexity: intermediate
+  description: Wine tasting notes with ratings and flavor profiles
+
+- id: cocktail
+  file: marp_cocktail.md
+  category: lifestyle-editorial
+  features: [recipes, photography, ingredients]
+  complexity: intermediate
+  description: Cocktail recipes with ingredient lists and preparation
+
+# Guide / How-To
+- id: garden
+  file: marp_garden.md
+  category: guide-howto
+  features: [step-by-step, tips, checklists]
+  complexity: intermediate
+  description: Gardening guide with planting schedules and care tips
+
+- id: houseplant
+  file: marp_houseplant.md
+  category: guide-howto
+  features: [care-guide, troubleshooting, tips]
+  complexity: beginner
+  description: Houseplant care guide with watering schedules and common issues
+
+- id: home-gym
+  file: marp_home-gym.md
+  category: guide-howto
+  features: [equipment-guide, setup, budget]
+  complexity: intermediate
+  description: Home gym setup guide with equipment recommendations
+
+# Fun / Creative
+- id: kids-party
+  file: marp_kids-party.md
+  category: fun-creative
+  features: [activities, games, colorful]
+  complexity: beginner
+  description: Kids party planning with games and activity ideas
+
+- id: board-game
+  file: marp_board-game.md
+  category: fun-creative
+  features: [rules, gameplay, components]
+  complexity: intermediate
+  description: Board game rules and gameplay guide
+
+- id: film-director
+  file: marp_film-director.md
+  category: fun-creative
+  features: [filmography, timeline, ratings]
+  complexity: intermediate
+  description: Film director retrospective with filmography and ratings
+
+# Travel / Location
+- id: travel
+  file: marp_travel.md
+  category: travel-location
+  features: [maps, itinerary, photography]
+  complexity: intermediate
+  description: Travel guide with itinerary and photo highlights
+
+- id: walking-tour
+  file: marp_walking-tour.md
+  category: travel-location
+  features: [map, route, landmarks]
+  complexity: intermediate
+  description: City walking tour with route and landmark descriptions
+
+- id: road-trip
+  file: marp_road-trip.md
+  category: travel-location
+  features: [route, stops, itinerary]
+  complexity: intermediate
+  description: Road trip planner with stops and daily itinerary
+
+# Showcase / Hero
+- id: hero
+  file: marp_hero.md
+  category: showcase-hero
+  features: [visual-first, minimal, full-bleed]
+  complexity: beginner
+  description: Hero-style showcase with full-bleed imagery
+
+- id: apartment
+  file: marp_apartment.md
+  category: showcase-hero
+  features: [interior, photography, minimal]
+  complexity: intermediate
+  description: Apartment showcase with interior photography
+
+- id: wardrobe
+  file: marp_wardrobe.md
+  category: showcase-hero
+  features: [fashion, photography, minimal]
+  complexity: intermediate
+  description: Wardrobe showcase with outfit photography
+
+# Reference / Sampler
+- id: sample
+  file: marp_sample.md
+  category: reference-sampler
+  features: [all-components, templates, examples]
+  complexity: advanced
+  description: Component showcase with all available templates and elements
