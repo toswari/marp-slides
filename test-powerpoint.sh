@@ -96,6 +96,7 @@ fi
 rm -f /tmp/test-marp.md /tmp/test-marp.pptx
 
 # Convert all examples/*.md to PPTX
+# Uses *_pptx.md versions when available for SVG-heavy files
 echo ""
 echo "=== Converting all examples to PPTX ==="
 ORIG_DIR="$(pwd)"
@@ -103,9 +104,20 @@ cd examples
 COUNT=0
 for mdfile in *.md; do
     if [ -f "$mdfile" ]; then
+        # Skip _pptx.md files (they're source files, not separate examples)
+        if [[ "$mdfile" == *_pptx.md ]]; then
+            continue
+        fi
         pptxfile="${mdfile%.md}.pptx"
-        echo "Converting: $mdfile => $pptxfile"
-        npx @marp-team/marp-cli "$mdfile" --pptx --allow-local-files -o "$pptxfile" 2>&1 | grep -E "INFO" || true
+        # Check if a _pptx.md version exists for this file
+        pptx_source="${mdfile%.md}_pptx.md"
+        if [ -f "$pptx_source" ]; then
+            echo "Converting: $pptx_source => $pptxfile (PPTX-optimized)"
+            npx @marp-team/marp-cli "$pptx_source" --pptx --allow-local-files -o "$pptxfile" 2>&1 | grep -E "INFO" || true
+        else
+            echo "Converting: $mdfile => $pptxfile"
+            npx @marp-team/marp-cli "$mdfile" --pptx --allow-local-files -o "$pptxfile" 2>&1 | grep -E "INFO" || true
+        fi
         COUNT=$((COUNT + 1))
     fi
 done

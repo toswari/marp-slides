@@ -1,259 +1,69 @@
-# Convert MARP Slides to OpenClaw Skills Plan
+# PPTX Conversion Fix Plan
 
-## ✅ CONVERSION COMPLETE + PDF FIX
+## Problem Analysis
 
-All phases have been executed successfully. The marp-slides skill has been converted to the OpenClaw format.
+The PowerPoint (PPTX) export from Marp is rendering raw HTML/SVG code as text instead of properly rendering the visual elements. This is visible in `marp_language.pptx` where:
+- SVG markup is displayed as raw text
+- HTML tags like `<div>`, `<span>` are visible
+- CSS classes and inline styles are shown as text
 
-**Latest Update (2026-04-10):** Fixed PDF rendering issue - inline `style=` attributes are not rendered in PDF export. Solution: Use CSS classes defined in frontmatter `style:` block.
+## Root Cause
 
-### New Structure Created
+Marp's PPTX export has limitations compared to PDF/HTML:
+1. **Limited HTML support**: PPTX export doesn't fully support complex HTML structures
+2. **SVG rendering issues**: Inline SVG in slides gets serialized as text
+3. **CSS limitations**: Advanced CSS features may not translate to PowerPoint
 
-```
-marp-slides/
-├── skill.yaml              # ✅ Created - OpenClaw skill definition
-├── instructions.md         # ✅ Created - Core rules and guidelines
-├── README.md               # ✅ Updated - New project documentation
-├── package.json            # ✅ Created - Dependencies and scripts
-├── settings.json           # ✅ Created - VS Code settings
-├── convert-to-claw-plan.md # This file
-│
-├── templates/
-│   ├── dark-theme.css      # ✅ Created - Dark theme (Outfit + Raleway)
-│   └── light-theme.css     # ✅ Created - Light theme (Space Grotesk)
-│
-├── components/
-│   ├── metrics.md          # ✅ Created - Metric cards, status dots, tags
-│   ├── charts.md           # ✅ Created - SVG chart templates
-│   ├── interactive.md      # ✅ Created - Collapsible, tooltips, inputs
-│   ├── layouts.md          # ✅ Created - Splits, mockups, timelines
-│   └── icons.md            # ✅ Created - 20+ SVG icons
-│
-├── examples/
-│   ├── README.md           # ✅ Created - Category index
-│   ├── examples.yaml       # ✅ Created - Machine manifest
-│   └── *.md                # Existing 22 example decks
-│
-└── exports/                # ✅ Created - Output directory
-```
+## Solution: Replace SVG with Emoji ✅
 
----
+After testing, the fix is to **replace inline SVG elements with emoji characters** for PPTX-compatible output.
 
-## Phase Completion Summary
+### What Works in PPTX:
+- ✅ Basic markdown (headers, lists, bold, italic)
+- ✅ Tables
+- ✅ CSS styling (colors, fonts, layouts via `<div>` with inline styles)
+- ✅ Emoji characters (📚  💬  etc.)
+- ✅ Marp directives (`<!-- _class: lead -->`)
 
-| Phase | Status | Files Created |
-|-------|--------|---------------|
-| Phase 1: Research | ✅ Complete | skill.yaml structure defined |
-| Phase 2: Metadata | ✅ Complete | skill.yaml with full metadata |
-| Phase 3: Restructuring | ✅ Complete | instructions.md, templates/ |
-| Phase 4: Components | ✅ Complete | 5 component files |
-| Phase 5: Examples | ✅ Complete | examples/README.md, examples.yaml |
-| Phase 6: Configuration | ✅ Complete | package.json, settings.json |
-| Phase 7: Validation | ✅ Complete | Structure verified |
-| Phase 8: Documentation | ✅ Complete | README.md updated |
+### What Doesn't Work in PPTX:
+- ❌ Inline `<svg>` elements (render as raw XML text)
+- ❌ Complex nested HTML structures
 
-**Total files created:** 14
-**Original SKILL.md:** Preserved for reference
+## Implementation
 
----
+### Files to Fix
 
-## Original Plan (Reference)
+Create `*_pptx.md` versions of files with heavy SVG usage:
 
-### Files Overview (Original)
-```
-marp-slides/
-├── SKILL.md              # Main skill definition (203 lines)
-├── README.md             # User documentation (108 lines)
-└── examples/             # 22 curated example decks
+| File | Issue | Fix |
+|------|-------|-----|
+| `marp_language.md` | SVG icons, kanji box | Replace with emoji (📚 ⭐ 💬) |
+| `marp_cocktail.md` | SVG garnish icons | Replace with emoji (🍋 🍒 🌿) |
+| `marp_coffee.md` | SVG coffee icons | Replace with emoji (☕ 🫘 ) |
+
+### Example Fix (marp_language.md)
+
+**Before (SVG):**
+```html
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e94560" stroke-width="2">
+  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+</svg>
+JLPT N5
 ```
 
-### Key Skill Components Identified
-
-| Component | Current Location | Description |
-|-----------|------------------|-------------|
-| Metadata | SKILL.md lines 1-6 | name, description, version, updated |
-| Triggers | SKILL.md line 3 | 'marp', 'slides', 'presentation', 'deck' |
-| Prerequisites | SKILL.md lines 10-13 | VS Code extension, settings, export commands |
-| Examples Reference | SKILL.md lines 15-27 | Category table with 22 example decks |
-| Core Rules | SKILL.md lines 29-33 | Slide structure, frontmatter, enableHtml |
-| CSS Templates | SKILL.md lines 35-61 | Dark theme with CSS variables |
-| Font Pairings | SKILL.md lines 74-83 | 6 tested combinations |
-| Image Handling | SKILL.md lines 85-93 | Relative paths, headers, backgrounds |
-| Components | SKILL.md lines 95-153 | Metrics, charts, interactive elements |
-| SVG Icons | SKILL.md lines 155-175 | 16+ icon paths |
-| Animations | SKILL.md lines 176-183 | float, glow, blink with delays |
-| Export Commands | SKILL.md lines 184-189 | PDF, PPTX, HTML via marp-cli |
-
----
-
-## Detailed Phase Breakdown
-
-### Phase 1: Research OpenClaw Specification ✅
-
-- [x] **1.1** Located OpenClaw skills documentation (assumed common patterns)
-- [x] **1.2** Identified required metadata fields
-- [x] **1.3** Determined file naming: skill.yaml
-- [x] **1.4** Defined trigger/activation mechanism format
-- [x] **1.5** Created skill.yaml with standard structure
-
-### Phase 2: Metadata Migration ✅
-
-- [x] **2.1** Converted YAML frontmatter to skill.yaml
-- [x] **2.2** Mapped trigger keywords: marp, slides, presentation, deck, dashboard, charts
-- [x] **2.3** Added: author, license, category, prerequisites, settings, export_commands
-
-### Phase 3: Content Restructuring ✅
-
-- [x] **3.1** Separated instructional content to instructions.md
-- [x] **3.2** Organized into: instructions.md, templates/, components/, examples/
-- [x] **3.3** Extracted CSS templates: dark-theme.css, light-theme.css
-
-### Phase 4: Component Library Extraction ✅
-
-- [x] **4.1** Created 5 component files:
-  - components/metrics.md
-  - components/charts.md
-  - components/interactive.md
-  - components/layouts.md
-  - components/icons.md
-- [x] **4.2** Documented usage patterns with HTML examples
-- [x] **4.3** Added composition guidelines
-
-### Phase 5: Example Integration ✅
-
-- [x] **5.1** Verified 22 examples in examples/
-- [x] **5.2** Created examples/README.md with category index
-- [x] **5.3** Added metadata: category, features, complexity, description
-- [x] **5.4** Created examples.yaml manifest
-
-### Phase 6: Configuration & Prerequisites ✅
-
-- [x] **6.1** Documented VS Code extension in skill.yaml
-- [x] **6.2** Created settings.json
-- [x] **6.3** Documented marp-cli in package.json scripts
-- [x] **6.4** Created package.json with dependencies
-
-### Phase 7: Testing & Validation ✅
-
-- [x] **7.1** Structure validated - all files created
-- [x] **7.2** Triggers defined in skill.yaml
-- [x] **7.3** Example references in examples.yaml
-- [x] **7.4** Component templates documented
-- [x] **7.5** Export commands in package.json scripts
-
-### Phase 8: Documentation Updates ✅
-
-- [x] **8.1** Updated README.md with new structure
-- [x] **8.2** Created examples/README.md for contributors
-- [x] **8.3** Documented migration in this file
-- [x] **8.4** Version tracked in skill.yaml (2.0.0)
-
----
-
-## Notes
-
-- The current skill is well-structured with clear separation of concerns
-- The 22 examples are a key differentiator — preserved and documented
-- CSS templates and SVG components are portable and converted cleanly
-- Trigger keywords are straightforward and map well to any skill system
-- Original SKILL.md preserved for backward compatibility
-
----
-
-## PDF Rendering Fix (Critical)
-
-### Problem Discovered
-
-When exporting to PDF, HTML elements may not render correctly. The issue is that the `--html` CLI flag must be passed to enable HTML tag support during PDF conversion.
-
-### Solution
-
-**Use the `--html` flag when exporting to PDF:**
-
-```bash
-# Correct command for PDF export
-npx @marp-team/marp-cli slides.md --pdf --html --allow-local-files
+**After (Emoji):**
+```html
+📚 JLPT N5
 ```
 
-**Also use CSS classes in frontmatter for consistent styling:**
+## Testing Results
 
-```markdown
----
-marp: true
-theme: default
-style: |
-  .flex-row { display: flex; gap: 14px; }
-  .card { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 18px; }
-  .metric-label { font-size: 0.6em; color: var(--m); text-transform: uppercase; }
-  .metric-value { font-size: 2em; font-weight: 800; color: var(--t); }
----
+- ✅ `marp_language_pptx.md` → PPTX (1.3MB) - Valid structure, no SVG text artifacts
+- Test command: `npx @marp-team/marp-cli file_pptx.md --pptx -o output.pptx`
 
-<div class="flex-row">
-  <div class="card">
-    <div class="metric-label">Revenue</div>
-    <div class="metric-value">$45,000</div>
-  </div>
-</div>
-```
+## Action Items
 
-### Required CSS Classes for Components
-
-Add these to your frontmatter for metric cards:
-
-```css
-.card { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 18px; }
-.card-accent { border-top: 3px solid var(--a); }
-.card-success { border-top: 3px solid var(--g); }
-.metric-label { font-size: 0.6em; color: var(--m); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
-.metric-value { font-size: 2em; font-weight: 800; color: var(--t); line-height: 1; }
-.metric-trend { font-size: 0.75em; color: var(--g); margin-top: 6px; display: flex; align-items: center; gap: 4px; }
-.flex-row { display: flex; gap: 14px; margin-top: 16px; }
-.flex-1 { flex: 1; }
-```
-
-### Updated Files
-
-| File | Change |
-|------|--------|
-| `components/metrics.md` | Documents CSS classes instead of inline styles |
-| `slides.md` (test) | Updated to use CSS classes, exports correctly to PDF |
-| `HOW-TOs.md` | Added OpenClaw export workflow |
-| `skill.yaml` | Added `openclaw_integration` section |
-| `test-pdf.sh` | Unit test script for PDF export validation |
-
-### OpenClaw Export Workflow
-
-After generating slides content, users can say:
-- "Export to PDF" → runs `npx @marp-team/marp-cli slides.md --pdf --html --allow-local-files`
-- "Export to HTML" → runs `npx @marp-team/marp-cli slides.md --html --allow-local-files`
-- "Export to PowerPoint" → runs `npx @marp-team/marp-cli slides.md --pptx --allow-local-files`
-
-**Note:** The `--html` flag is required for PDF export to enable HTML tag rendering.
-
-### Test Results
-
-| Export | Result | Size |
-|--------|--------|------|
-| PDF (with --html) | ✅ Works correctly | 35KB (test), 2.7MB (example) |
-| HTML | ✅ Works | 98KB |
-| Example deck | ✅ marp_sample.pdf exports correctly | 2.7MB |
-
-### Unit Test
-
-Run `./test-pdf.sh` to validate PDF export:
-
-```
-=== MARP Slides PDF Unit Test ===
-Test 1: Checking marp-cli installation...
-  ✓ @marp-team/marp-cli v3.4.0 (w/ @marp-team/marp-core v3.9.1)
-Test 2: Creating test slide with CSS classes...
-  ✓ Test file created
-Test 3: Exporting to PDF with --html flag...
-  ✓ PDF generated
-Test 4: Verifying PDF content...
-  ✓ 'Revenue' text found
-  ✓ '45,000' text found
-  ✓ No raw HTML tags in PDF
-Test 5: Checking PDF file size...
-  ✓ PDF size: 35013 bytes (valid)
-=== All Tests Passed ===
-```
+- [ ] Create `_pptx.md` versions for all SVG-heavy examples
+- [ ] Update `test-powerpoint.sh` to use `_pptx.md` files when available
+- [ ] Document PPTX best practices in README
+- [ ] Consider automated pre-processor script for future conversions
