@@ -2,37 +2,40 @@
 
 ## Problem Analysis
 
-The PowerPoint (PPTX) export from Marp renders slides as **PNG images** embedded in the PPTX file. This is the expected behavior for styled slides.
+### Issue 1: Raw HTML Showing as Text (facebook-ads.pptx)
+The PPTX export was rendering **raw HTML as visible text** instead of rendering styled content. Slides showed literal HTML tags like:
+```html
+<div style="font-family: 'Raleway'; font-weight: 100; ...">April 2026</div>
+```
+
+### Issue 2: SVG Elements Showing as Raw XML
+SVG elements were being serialized as raw XML text instead of being rendered visually.
+
+## Root Cause
+
+Marp's PPTX export has **strict HTML sanitization**. When HTML contains certain patterns that can't be safely converted, Marp escapes the HTML and renders it as text instead of rendering it visually.
+
+### Key PPTX Limitations:
+1. **Inline styles with CSS variables** - `var(--color)` may not resolve properly
+2. **Complex nested `<div>` structures** - Deep nesting can trigger HTML escaping
+3. **SVG elements** - Not supported in PPTX, will show as raw XML
+4. **`<defs>` and gradients in SVG** - Will not render
+5. **External font imports in `<style>`** - May not load for PPTX
 
 ### Important Finding:
-Marp's PPTX export creates slides as PNG images, NOT as native PowerPoint text/shapes. This means:
+Marp's PPTX export creates slides as **PNG images** embedded in the PPTX file. This is expected behavior:
 - ✅ Visual fidelity is preserved (what you see is what you get)
-- ✅ Complex CSS styling works correctly
+- ✅ Complex CSS styling works correctly when rendered as PNG
 - ❌ Text is NOT editable in PowerPoint
 - ❌ Content is rendered as images, not native PPTX elements
 
-## Root Cause of Original Issue
+## Solution: PPTX-Optimized Source Files ✅
 
-The original issue with SVG markup showing as raw text was caused by:
-1. **Inline `<svg>` elements** being serialized as XML text instead of rendered
-2. **Complex nested HTML** not being properly converted to the image
-
-## Solution: Simplified Markdown for PPTX ✅
-
-For best PPTX results, use **simplified markdown** without complex HTML structures:
-
-### What Works Best for PPTX:
-- ✅ Pure markdown (headers, lists, bold, italic, blockquotes)
-- ✅ Emoji characters (📚 💬 ⭐  🍋)
-- ✅ Simple tables (avoid `<span>` inside cells)
-- ✅ Line breaks (`<br>` or two spaces at end of line)
-- ✅ Marp directives (`<!-- _class: lead -->`)
-- ✅ CSS for colors, fonts, backgrounds (rendered into PNG)
-
-### What to Avoid for PPTX:
-- ❌ Inline `<svg>` elements (use emoji instead)
-- ❌ Complex nested `<div>` structures with CSS grids
-- ❌ `<span>` elements with classes in table cells
+Create `*_pptx.md` versions that use:
+- **Pure markdown** where possible (headers, lists, tables)
+- **Emoji instead of SVG** (📊 💰 📈 🎯 ️ ✅)
+- **Simplified inline styles** with hardcoded colors (not CSS variables)
+- **Avoid deep nesting** - use markdown blocks instead
 
 ## Implementation
 
@@ -41,27 +44,37 @@ For best PPTX results, use **simplified markdown** without complex HTML structur
 | File | Original Issue | Fix Applied |
 |------|---------------|-------------|
 | `marp_language.md` | SVG icons, complex HTML | Simplified markdown, emoji icons |
+| `marp_facebook-ads.md` | Complex inline styles with CSS vars, SVG charts, deep nested divs | Tables, emoji, simplified structure |
 
-### Example Fix (marp_language.md)
+### Example: facebook-ads Transformation
 
-**Before (SVG - shows as raw XML in PPTX):**
+**Before (shows raw HTML in PPTX):**
 ```html
-<svg width="14" height="14" viewBox="0 0 24 24">
-  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-</svg>
+<div style="display: flex; gap: 8px; margin-top: 20px;">
+  <span style="background: #ff6b1a15; border: 1px solid #ff6b1a33; ...">8 Campaigns</span>
+</div>
 ```
 
-**After (Emoji - renders correctly):**
+**After (renders correctly as PNG):**
+```markdown
+📊 8 Campaigns &nbsp;&nbsp; 💰 $10.9K Spend &nbsp;&nbsp; 📈 3.8x ROAS
 ```
-📚 JLPT N5
+
+**Complex SVG chart replaced with table:**
+```markdown
+| Metric | Value | Change |
+|--------|-------|--------|
+| 💰 Spend | $10,939 | 📈 +32.7% |
+| 💵 Revenue | $41,946 | 📈 +49.3% |
 ```
 
 ## Testing Results
 
-| File | Size | Status |
-|------|------|--------|
-| `marp_language.pptx` | 461KB | ✅ Content renders as PNG image |
-| All 24 examples | Various | ✅ All converted successfully |
+| File | Size | Slides | Status |
+|------|------|--------|--------|
+| `marp_language.pptx` | 461KB | 5 | ✅ PNG images embedded |
+| `marp_facebook-ads.pptx` | 5.3MB | 17 | ✅ PNG images embedded |
+| All 24 examples | Various | Various | ✅ All converted successfully |
 
 ### Verification Method:
 ```bash
@@ -70,25 +83,37 @@ unzip -l file.pptx | grep "ppt/media"
 # Output shows: Slide-1-image-1.png, Slide-2-image-1.png, etc.
 ```
 
-## test-powerpoint.sh Updates
+## test-powerpoint.sh
 
-The script now:
+The script already supports PPTX-optimized sources:
 1. Looks for `*_pptx.md` versions first (PPTX-optimized source)
 2. Falls back to original `.md` files if no optimized version exists
 3. All 24 examples convert successfully
 
 ## PPTX Best Practices
 
-1. **Use emoji instead of SVG icons** - 📚  💬 ☕ 🍋 🌿
-2. **Use pure markdown tables** - avoid `<span>` in cells
-3. **Use `<br>` for line breaks** - or two spaces at end of line
-4. **Keep CSS simple** - colors, fonts, backgrounds work fine
-5. **Test with `unzip -l`** - verify PNG images are embedded
+### DO:
+- ✅ Use pure markdown (headers, lists, bold, italic, blockquotes)
+- ✅ Use emoji for icons (📊 💰  🎯 ️ ✅  💬 ☕ )
+- ✅ Use markdown tables for data
+- ✅ Use `<details>` for expandable content
+- ✅ Use `![bg](image-url)` for background images
+- ✅ CSS for colors, fonts, backgrounds (rendered into PNG)
+- ✅ Marp directives (`<!-- _class: lead -->`)
+
+### AVOID:
+- ❌ Inline `<svg>` elements (use emoji instead)
+- ❌ CSS variables in inline styles (`var(--color)`)
+- ❌ Complex nested `<div>` with CSS grids/flex
+- ❌ `<span>` elements with classes in table cells
+- ❌ `<defs>` and gradients in SVG
+- ❌ Deep HTML nesting (triggers escaping)
 
 ## Action Items
 
 - [x] Create `marp_language_pptx.md` with simplified markdown
-- [x] Update `test-powerpoint.sh` to use `*_pptx.md` files
+- [x] Create `marp_facebook-ads_pptx.md` with tables and emoji
+- [x] Update `test-powerpoint.sh` to use `*_pptx.md` files (already supported)
 - [x] Regenerate all 24 PPTX files
-- [ ] Create PPTX-optimized versions for other SVG-heavy files
+- [ ] Create PPTX-optimized versions for other SVG-heavy files (marp_sample.md, etc.)
 - [ ] Document PPTX limitations in README
