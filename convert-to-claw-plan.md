@@ -1,8 +1,10 @@
 # Convert MARP Slides to OpenClaw Skills Plan
 
-## ✅ CONVERSION COMPLETE
+## ✅ CONVERSION COMPLETE + PDF FIX
 
 All phases have been executed successfully. The marp-slides skill has been converted to the OpenClaw format.
+
+**Latest Update (2026-04-10):** Fixed PDF rendering issue - inline `style=` attributes are not rendered in PDF export. Solution: Use CSS classes defined in frontmatter `style:` block.
 
 ### New Structure Created
 
@@ -154,3 +156,78 @@ marp-slides/
 - CSS templates and SVG components are portable and converted cleanly
 - Trigger keywords are straightforward and map well to any skill system
 - Original SKILL.md preserved for backward compatibility
+
+---
+
+## PDF Rendering Fix (Critical)
+
+### Problem Discovered
+
+When exporting to PDF, inline `style=` attributes in HTML elements are rendered as raw text instead of being applied as styles:
+
+```html
+<!-- BROKEN in PDF: Shows raw style text -->
+<div style="display: flex; gap: 14px;">
+  <div style="flex: 1; background: #111; ...">Content</div>
+</div>
+```
+
+### Solution
+
+Use CSS classes defined in the slide's frontmatter `style:` block:
+
+```markdown
+---
+marp: true
+theme: default
+html: true
+style: |
+  .flex-row { display: flex; gap: 14px; }
+  .card { background: var(--s); border: 1px solid var(--b); ... }
+  .metric-label { font-size: 0.6em; color: var(--m); ... }
+---
+
+<!-- WORKS in PDF: Uses CSS classes -->
+<div class="flex-row">
+  <div class="card">Content</div>
+</div>
+```
+
+### Required CSS Classes for Components
+
+Add these to your frontmatter for metric cards:
+
+```css
+.card { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 18px; }
+.card-accent { border-top: 3px solid var(--a); }
+.card-success { border-top: 3px solid var(--g); }
+.metric-label { font-size: 0.6em; color: var(--m); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+.metric-value { font-size: 2em; font-weight: 800; color: var(--t); line-height: 1; }
+.metric-trend { font-size: 0.75em; color: var(--g); margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+.flex-row { display: flex; gap: 14px; margin-top: 16px; }
+.flex-1 { flex: 1; }
+```
+
+### Updated Files
+
+| File | Change |
+|------|--------|
+| `components/metrics.md` | Now documents CSS classes instead of inline styles |
+| `slides.md` (test) | Updated to use CSS classes, exports correctly to PDF |
+| `HOW-TOs.md` | Added OpenClaw export workflow |
+| `skill.yaml` | Added `openclaw_integration` section |
+
+### OpenClaw Export Workflow
+
+After generating slides content, users can say:
+- "Export to PDF" → runs `npx @marp-team/marp-cli slides.md --pdf --allow-local-files`
+- "Export to HTML" → runs `npx @marp-team/marp-cli slides.md --html --allow-local-files`
+- "Export to PowerPoint" → runs `npx @marp-team/marp-cli slides.md --pptx --allow-local-files`
+
+### Test Results
+
+| Export | Result | Size |
+|--------|--------|------|
+| PDF | ✅ Works with CSS classes | 69KB (test), 2.7MB (example) |
+| HTML | ✅ Works | 98KB |
+| Example deck | ✅ marp_sample.pdf exports correctly | 2.7MB |

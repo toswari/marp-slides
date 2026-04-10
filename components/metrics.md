@@ -1,21 +1,37 @@
 # Dashboard Metrics Components
 
-## Metric Card (Gradient Top Border)
+**Note:** For PDF export, use CSS classes defined in your slide's frontmatter `style:` block instead of inline `style=` attributes.
 
-Card with gradient top border, icon, label, big number, and trend arrow.
+## Required CSS Classes
+
+Add these to your slide's frontmatter:
+
+```css
+.card { background: var(--s); border: 1px solid var(--b); border-radius: 10px; padding: 18px; }
+.card-accent { border-top: 3px solid var(--a); }
+.card-success { border-top: 3px solid var(--g); }
+.metric-label { font-size: 0.6em; color: var(--m); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+.metric-value { font-size: 2em; font-weight: 800; color: var(--t); line-height: 1; }
+.metric-trend { font-size: 0.75em; color: var(--g); margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+.flex-row { display: flex; gap: 14px; margin-top: 16px; }
+.flex-1 { flex: 1; }
+.tag { font-family: 'Outfit'; font-weight: 600; font-size: 0.55em; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; display: inline-block; }
+.tag-scale { background: #22c55e12; color: var(--g); border: 1px solid #22c55e22; }
+.tag-kill { background: #ef444412; color: var(--r); border: 1px solid #ef444422; }
+.tag-review { background: #f5a62312; color: var(--y); border: 1px solid #f5a62322; }
+.progress-bar { height: 3px; background: #0a0a0a; border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--g); }
+.pill { background: #ff6b1a15; border: 1px solid #ff6b1a33; border-radius: 20px; padding: 4px 14px; font-family: 'Outfit'; font-size: 0.55em; color: #ff6b1aaa; font-weight: 400; }
+```
+
+## Metric Card
 
 ```html
-<div style="flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; position: relative; overflow: hidden;">
-  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, var(--accent), transparent);"></div>
-  <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5">
-      <!-- Icon path here -->
-    </svg>
-    <span style="font-family: 'Outfit'; font-weight: 600; font-size: 0.5em; color: var(--muted); letter-spacing: 0.1em;">LABEL</span>
-  </div>
-  <div style="font-family: 'Outfit'; font-size: 2em; font-weight: 800; color: var(--light); line-height: 1;">$10,939</div>
-  <div style="font-size: 0.65em; color: var(--green); margin-top: 6px;">
-    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" style="vertical-align: middle;">
+<div class="flex-1 card card-accent">
+  <div class="metric-label">Revenue</div>
+  <div class="metric-value">$10,939</div>
+  <div class="metric-trend">
+    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
       <polyline points="18 15 12 9 6 15"/>
     </svg> +32.7%
   </div>
@@ -23,8 +39,6 @@ Card with gradient top border, icon, label, big number, and trend arrow.
 ```
 
 ## Status Dots
-
-Inline SVG circles for status indication.
 
 ```html
 <!-- Green (Active) -->
@@ -45,44 +59,43 @@ Inline SVG circles for status indication.
 
 ## Verdict Tags
 
-Colored tags for scale/kill/review decisions.
-
 ```html
 <!-- Scale (Green) -->
-<span class="tag" style="background:#22c55e12; color:var(--green); border:1px solid #22c55e22;">Scale</span>
+<span class="tag tag-scale">Scale</span>
 
 <!-- Kill (Red) -->
-<span class="tag" style="background:#ef444412; color:var(--red); border:1px solid #ef444422;">Kill</span>
+<span class="tag tag-kill">Kill</span>
 
 <!-- Review (Yellow) -->
-<span class="tag" style="background:#f5a62312; color:var(--yellow); border:1px solid #f5a62322;">Review</span>
-```
-
-## Hover Rows
-
-Wrapper for hover highlight effect on list items.
-
-```html
-<div class="row" style="display: flex; align-items: center; gap: 10px; padding: 8px 8px;">
-  <!-- Row content -->
-</div>
+<span class="tag tag-review">Review</span>
 ```
 
 ## Progress Bar
 
-Simple horizontal progress bar.
-
 ```html
-<div style="flex: 1; height: 3px; background: #0a0a0a; border-radius: 2px; overflow: hidden;">
-  <div style="background: var(--green); width: 76%; height: 100%;"></div>
+<div class="progress-bar">
+  <div class="progress-fill" style="width: 76%;"></div>
 </div>
 ```
 
 ## Pill Tags
 
-Rounded pill-style tags for filters/categories.
+```html
+<span class="pill">8 Campaigns</span>
+```
+
+## Example: Multiple Cards in Row
 
 ```html
-<span style="background: #ff6b1a15; border: 1px solid #ff6b1a33; border-radius: 20px; padding: 4px 14px; font-family: 'Outfit'; font-size: 0.55em; color: #ff6b1aaa; font-weight: 400;">
-  8 Campaigns
-</span>
+<div class="flex-row">
+  <div class="flex-1 card card-accent">
+    <div class="metric-label">Revenue</div>
+    <div class="metric-value">$45,000</div>
+    <div class="metric-trend">+23%</div>
+  </div>
+  <div class="flex-1 card card-success">
+    <div class="metric-label">Customers</div>
+    <div class="metric-value">1,234</div>
+    <div class="metric-trend">+18%</div>
+  </div>
+</div>
